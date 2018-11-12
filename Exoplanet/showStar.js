@@ -19,7 +19,7 @@ function hostStarSelected()
     if(hostStarSelect.selectedIndex!=0)
     {
        //  showExoDataButton.disabled = true
-      setTimeout('zoomToSelectedStarButton.disabled = false',4000)
+
 
         var host = hostStarSelect.options[hostStarSelect.selectedIndex].value
 
@@ -73,7 +73,7 @@ function hostStarSelected()
         }
 
         ExoPlanetXML += "</EXOPLANETS>"
-
+          zoomToSelectedStarButton.disabled = false
        }
       )
 
