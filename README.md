@@ -11,6 +11,6 @@ Zoom into interactive universe to the surface of each star.
 
 Place unzipped files into that site's folder.
 
-To run the application, in **localhost** select the index.htm file. 
+To run the application, in **localhost** select the **startExoplanet.htm** file. 
 
 To preview how this application works go to: http://svgDiscovery.com/N/startExoplanet.htm
