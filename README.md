@@ -13,4 +13,4 @@ Place unzipped files into that site's folder.
 
 To run the application, in **localhost** select the index.htm file. 
 
-To preview how this application works go to: http://svgDiscovery.com/N/starExoplanet.htm
+To preview how this application works go to: http://svgDiscovery.com/N/startExoplanet.htm
