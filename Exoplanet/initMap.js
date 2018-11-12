@@ -591,12 +591,12 @@ function initMap()
     window.name = 'parentWindow'; //---required for add Path---
     document.body.style.width=window.innerWidth+"px"
     document.body.style.overflow="hidden"
-    getConBoundries() //---constellation.js---
-    initCelestialMap()
-    initStarMap()
+    getExoXml()
+    getHostData()
+
+
   // getAddedStarData()
-   getExoXml()
-   getHostData()
+
 
 
 
@@ -607,8 +607,11 @@ function getHostData()
    d3.json("Exoplanet/starPacket.js", function(data)
   {
     HostData=data
-   loadHostStars()
 
+    getConBoundries() //---constellation.js---
+    initCelestialMap()
+    initStarMap()
+    loadHostStars()    
   })
 
 
