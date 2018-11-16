@@ -25,6 +25,7 @@
     <script charset="UTF-8" type="text/javascript" src="Exoplanet/constellation.js"></script>
     <script charset="UTF-8" type="text/javascript" src="Exoplanet/exoplanet.js"></script>
     <script charset="UTF-8" type="text/javascript" src="Exoplanet/showStar.js"></script>
+    <script charset="UTF-8" type="text/javascript" src="Exoplanet/animatePlanet.js"></script>
 
 
  </head>
@@ -75,7 +76,7 @@
     <button id=zoomToSelectedStarButton disabled onClick=zoomToSelectedStar()>Zoom into star surface</button>
 </td></tr>
 </table>
-<div id=exoplanetDataTableDiv style='border-radius:8px;padding:10px;border:3px solid #004953;background:white;display:none;position:absolute;top:60px;left:50px;width:400px;height:600px;overflow:auto;'>
+<div id=exoplanetDataTableDiv style='border-radius:8px;padding:10px;border:3px solid #004953;background:white;display:none;position:absolute;top:10px;left:50px;width:400px;height:600px;overflow:auto;'>
     <table style=width:100%;background:#004953;color:white;font-weight:bold><tr><td style=width:90% align=center>Host Star &amp; it's Exoplanets</td><td align=right><button onmouseover=this.style.background='red'  onmouseout=this.style.background='' style=position:fixed onclick=exoplanetDataTableDiv.style.display='none'>X</button></td></tr></table>
 <table id=selectedStarTable  style=background:gold;width:100%;border-collapse:collapse border=1 >
 <tr style=font-weight:bold ><td id=S_NameTD colspan=2 align=center></td></tr>
