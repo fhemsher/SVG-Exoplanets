@@ -140,6 +140,8 @@ function starRedraw()
             ZoneView = false
             CoronaView = false
             SurfaceView = false
+
+
         }
         else //---rotateZoomStar.js ---
         {
@@ -214,19 +216,7 @@ function starRedraw()
                 hzZonePath.setAttribute("d", hzPathD)
             }
 
-            if(PlanetScale&&PlanetsLoaded)
-            {
-                PlanetG.style("display", "block")
-                PlanetG.selectAll(".exoCircle")
-                .data(PlanetCoordsArray)
-                .attr("transform", function(d)
-                    {
-
-                        return StarPoint(d)+"scale("+(StarView.k/StarScale)/PlanetScale+")" //+"rotate("+d[1]+" "+d[2]+" "+d[3]+")"
-                    }
-                )
-            }
-
+            
         }
         else
         {

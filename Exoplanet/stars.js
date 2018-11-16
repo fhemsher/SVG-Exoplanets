@@ -61,10 +61,12 @@ var HZone = false
 function zoomToSelectedStar()
 {
     hostStarSelect.options[hostStarSelect.selectedIndex].style.fontWeight = "bold"
-
+    StartScale=null //planet animation
     MyStars = true
     StopStarZoom = false
     startCursorLoc()
+
+
     PlanetCoordsArray =[]
     StarCoordsArray =[]
     StarsIDArray =[]
@@ -141,7 +143,8 @@ function zoomToSelectedStar()
         var comp = exo.getAttribute("CompositionClass") //--fill color---
         var hab = exo.getAttribute("HabitableClass") //--fill color---
         var atmos = exo.getAttribute("AtmosphereClass") //--stroke color---
-        var name = exo.getAttribute("Name") //--stroke color---
+        var name = exo.getAttribute("Name")
+        var period = exo.getAttribute("Period")  //--planet animation----
         var letterIndex = name.lastIndexOf(" ")
         var letter = name.charAt(letterIndex+1)
         //<EXOPLANETS><EXO id="exoplanet1538338800304" HostName="16 Cyg B" Name="16 Cyg B b" NameKepler="" NameKOI="" ZoneClass="Cold" MassClass="Jovian" CompositionClass="gas" AtmosphereClass="hydrogen-rich" HabitableClass="non-habitable" MinMass="534.14" Mass="534.14" MaxMass="" Radius="11.06" Density="0.39" Gravity="4.36" EscVel="6.95" SFluxMin=" 0.1183426" SFluxMean=" 0.4656991" SFluxMax="3.489002" TeqMin="149.4" TeqMean="187.6" TeqMax="348.2" TsMin="" TsMean="" TsMax="" SurfPress="210.6" Mag="-21.94" ApparSize="21.15" Period="799.50" SemMajorAxis="1.6800" Eccentricity="0.69" Inclination="" MeanDistance="1.22" Omega="83.4" HZD="1.15" HZC="7.17" HZA="7.16" HZI="0.09" SPH="" IntESI="0.00" SurfESI="0.00" ESI="0.39" HostHabCat="0" Habitable="0" HabMoon="0" Confirmed="1" Disc_Method="Radial Velocity" Disc_Year="1996.00"/></EXOPLANETS>
@@ -228,7 +231,7 @@ function zoomToSelectedStar()
 
         var c = StarProjection(PrimaryStarCoords)
 
-        setOrbitPlanet(ll, name, atmos, comp, hab, letter, k, exoElems.length)
+        setOrbitPlanet(ll, name, atmos, comp, hab, letter, k, exoElems.length,period)
     }
 
     if(MyExoplanet==true)
@@ -260,14 +263,14 @@ function zoomToSelectedStar()
 }
 var PlanetCoordsArray =[]
 var rotatePlanet = 0
-function setOrbitPlanet(ll, name, atmos, comp, hab, letter, k, qnty)
+function setOrbitPlanet(ll, name, atmos, comp, hab, letter, k, qnty,period)
 {
-
-    var id = "planet"+k
+     var utcms=new Date().getTime()
+    var id = "planet"+utcms
     var fill = "url(#unknown)"
-    var stroke = "gainsboro"
+    var stroke = "grey"
 
-    if(atmos=="no-atmosphere")stroke = "white"
+    if(atmos=="no-atmosphere")stroke = "gainsboro"
         if(atmos=="metals-rich")stroke = "red"
         if(atmos=="hydrogen-rich")stroke = "blue"
 
@@ -288,6 +291,7 @@ function setOrbitPlanet(ll, name, atmos, comp, hab, letter, k, qnty)
         .attr("class", "exoCircle")
         .attr("id", id)
         .attr("r", radius)
+        .attr("period", period)
         .attr("fill", fill)
         .attr("visibility", "hidden")
         .attr("stroke-width", strokeWidth)
@@ -295,6 +299,7 @@ function setOrbitPlanet(ll, name, atmos, comp, hab, letter, k, qnty)
         .attr("onmouseover", "showExoplanet(evt)")
         .attr("onmouseout", "hideExoplanet(evt)")
         .attr("stroke", stroke)
+
 
 }
 
@@ -314,27 +319,27 @@ function locatePlanets()
         if(path.id.indexOf("orbit")!=-1)
         {
             var pathLength = path.getTotalLength()
-
-            var lengthAtPoint = cnt*pathLength/8
-
-            var Pnt = path.getPointAtLength(lengthAtPoint)
-
-            var ll = StarProjection.invert([Pnt.x, Pnt.y])
-
+            var Pnt = path.getPointAtLength(0)
             var planet = planets.item(cnt)
-            planet.removeAttribute("visibility")
-            planet.setAttribute("transform", StarPoint(ll)+"scale("+PlanetScale+")")
 
-            PlanetCoordsArray.push(ll)
+            planet.removeAttribute("visibility")
+            planet.setAttribute("cx",Pnt.x)
+            planet.setAttribute("cy",Pnt.y)
+            var period=planet.getAttribute("period")
+            PlanetCoordsArray.push([path,planet,period])
+
             cnt++
         }
 
     }
 
     PlanetsLoaded = true
-    starRedraw()
-
+    attachPlanetAnimation()
 }
+
+
+
+
 var PlanetScale
 function zoomPrimaryStarSurfaceView()
 {

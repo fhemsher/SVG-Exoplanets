@@ -211,6 +211,7 @@ var DistancePath//---measure distance---
 var DistanceDot//---measure distance---
 
 var ImgDragArrow
+var CloneOrbitG //---animate planets---
 //---called via initMap---
 function initStarMap()
 {
@@ -493,6 +494,10 @@ feMerge.append("feMergeNode")
         .attr("shape-rendering","geometricPrecision")
          .attr("id", "exoplanetG")
 
+         CloneOrbitG=StarSVG.append("g") //---animate planets
+        .attr("shape-rendering","geometricPrecision")
+        .attr("id", "cloneOrbitG")
+        .style("visibility", "hidden")
 
 
        PlanetG = StarG.append("g");
@@ -611,7 +616,7 @@ function getHostData()
     getConBoundries() //---constellation.js---
     initCelestialMap()
     initStarMap()
-    loadHostStars()    
+    loadHostStars()
   })
 
 
