@@ -334,6 +334,7 @@ function locatePlanets()
     }
 
     PlanetsLoaded = true
+    
     attachPlanetAnimation()
 }
 
