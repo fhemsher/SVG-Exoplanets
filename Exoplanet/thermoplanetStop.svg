@@ -2119,7 +2119,7 @@
      transform="matrix(400,0,0,-360,415.72135,375.5674)"
      id="sphere"
      style="fill:#334070;stroke:none">
-
+     <circle id="thermoplanet" fill="#CA0A14"  stroke="none" r="1" />
     <g
        id="back"
        style="opacity:0.2;fill:url(#radialGradient5483)">

@@ -28,12 +28,13 @@ function attachPlanetAnimation()
 
         if(duration<3000)
             duration=1000*Math.random() +4000
+
         var path=PlanetCoordsArray[k][0]
         var myPlanet=PlanetCoordsArray[k][1]
         runAnim(path,myPlanet,duration)
     }
 
-
+   
 }
 
 /*
@@ -80,23 +81,24 @@ delta=function linear(p){return p}
 			delta: delta,
 			output: function(delta)
 			{
+               if(StopAnim==false)
+               {
+                    var currentScale=StarView.k
+                    var ratioScale=StartScale/currentScale
 
-            var currentScale=StarView.k
-            var ratioScale=StartScale/currentScale
+                    pathLength=path.getTotalLength()
+                    var length=pathLength*delta
+                    var Pnt=path.getPointAtLength(length)
 
-            pathLength=path.getTotalLength()
-            var length=pathLength*delta
-            var Pnt=path.getPointAtLength(length)
-
-             myPlanet.setAttribute("cx",Pnt.x*ratioScale)
-             myPlanet.setAttribute("cy",Pnt.y*ratioScale)
+                     myPlanet.setAttribute("cx",Pnt.x*ratioScale)
+                     myPlanet.setAttribute("cy",Pnt.y*ratioScale)
 
 
-            myPlanet.setAttribute("transform", "scale("+(StarView.k/StarScale)/PlanetScale+")")
-
+                    myPlanet.setAttribute("transform", "scale("+(StarView.k/StarScale)/PlanetScale+")")
+               }
 
         		//---finished---
-				if(progress==1)
+				if(progress==1 && StopAnim==false)
                 runAnim(path,myPlanet,duration)
 			}
 		})
