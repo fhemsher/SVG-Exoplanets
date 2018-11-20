@@ -2,7 +2,7 @@ var StopAnim=false
 function viewPlanetSelected()
 {
 
-    PlanetView.k = 140
+    PlanetView.k = 200
     PlanetView.r = [0,0,0]
     PlanetProjection.scale(PlanetView.k)
     PlanetProjection.rotate(PlanetView.r)
@@ -10,7 +10,7 @@ function viewPlanetSelected()
     PlanetZoom.scale(PlanetView.k)
     PrevPlanetTransX=PlanetViewWidth/2
     PrevPlanetTransY=PlanetViewHeight/2
-    PrevPlanetScale=140
+    PrevPlanetScale=200
           PlanetProjection.rotate([PlanetView.r[0], PlanetView.r[1], PlanetView.r[2]]).translate([PlanetViewWidth/2, PlanetViewHeight/2])
         PlanetProjection.scale([PlanetView.k])
       planetRedraw()
@@ -21,11 +21,11 @@ function viewPlanetSelected()
 
   // planetGrid.setAttribute("fill",planetColor)
  //  if(planetColor!="white")
-  //  planetGrid.setAttribute("fill-opacity",.4)
-    planetOutline.setAttribute("stroke",planet.getAttribute("stroke"))
-    planetOutline.setAttribute("fill",planetColor)
-     if(planetColor!="white")
-    planetOutline.setAttribute("fill-opacity",.4)
+  planetGrid.setAttribute("stroke",planetColor)
+   // planetOutline.setAttribute("stroke",planet.getAttribute("stroke"))
+   // planetOutline.setAttribute("fill",planetColor)
+    // if(planetColor!="white")
+   // planetOutline.setAttribute("fill-opacity",.4)
 
    var planetName= planet.getAttribute("planetName")
    planetNameSpan.innerHTML= planetName

@@ -44,9 +44,9 @@ function beginPlanetMap()
         StopPlanetZoom = false
         //---star view ditto celestial view
 
-         PlanetView = {r:[0, 0, 0], k: 140};
+         PlanetView = {r:[0, 0, 0], k: 200};
         //---rotate and scale this to match celestial---
-        PlanetProjection = d3.geo.mollweide().rotate([0, 0, 0]).translate([PlanetViewWidth/2, PlanetViewHeight/2]).scale([140])
+        PlanetProjection = d3.geo.orthographic().rotate([0, 0, 0]).translate([PlanetViewWidth/2, PlanetViewHeight/2]).scale([140])
         PlanetViewMap = d3.geo.path().projection(PlanetProjection);
         //projOutline = d3.geo.mollweide().translate([PlanetViewWidth/2, PlanetViewHeight/2]).scale([140]); //projected non moving outline
 
@@ -54,18 +54,18 @@ function beginPlanetMap()
         //---creates a 'shadow' grid identical to celestial---
         var graticule = d3.geo.graticule().minorStep([8, 4]);
          //PlanetOutline = d3.geo.path().projection(projOutline)
-        PlanetAtmos=PlanetViewG.append("path").datum(graticule.outline).attr("id", "planetOutline").attr("d", PlanetViewMap);
+       //PlanetAtmos=PlanetViewG.append("path").datum(graticule.outline).attr("id", "planetOutline").attr("stroke","lime").attr("stroke-width",4).attr("d", PlanetViewMap);
 
-        PlanetGrid=PlanetViewG.append("path").datum(graticule).attr("id","planetGrid").attr("fill", "none").attr("stroke", "black").attr("stroke-width", ".5").attr("d", PlanetViewMap);
+        PlanetGrid=PlanetViewG.append("path").datum(graticule).attr("id","planetGrid").attr("filter", "url(#drop-shadow)").attr("fill", "none").attr("stroke", "black").attr("stroke-width", ".5").attr("d", PlanetViewMap);
 
         //---restructure zoom for higher scale performance, PAN in lieu of rotation---
         PlanetZoom = d3.behavior.zoom().translate(PlanetProjection.translate()).scale(PlanetProjection.scale()).size([PlanetViewWidth, PlanetViewHeight]).scaleExtent([1, 100000]).on("zoom", planetRedraw);
         PlanetSVG.call(PlanetZoom).on("dblclick.zoom", null)
-            PlanetAtmos.attr("fill", "none")
-            PlanetAtmos.attr("stroke", "#191970")
-            PlanetAtmos.attr("stroke-width", "6")
+           // PlanetAtmos.attr("fill", "none")
+           // PlanetAtmos.attr("stroke", "#191970")
+          //  PlanetAtmos.attr("stroke-width", "6")
 
-        PlanetView.k = 140
+        PlanetView.k = 200
         PlanetView.r = [0,0,0]
         PlanetProjection.scale(PlanetView.k)
         PlanetProjection.rotate(PlanetView.r)
@@ -82,7 +82,7 @@ function beginPlanetMap()
 }
 var PrevPlanetTransX=0
 var PrevPlanetTransY=0
-var PrevPlanetScale=140
+var PrevPlanetScale=200
 
 
 function planetRedraw()
