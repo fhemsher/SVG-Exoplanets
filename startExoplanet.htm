@@ -29,56 +29,8 @@
     <script charset="UTF-8" type="text/javascript" src="Exoplanet/PlanetView/viewPlanet.js"></script>
     <script charset="UTF-8" type="text/javascript" src="Exoplanet/PlanetView/planetView.js"></script>
     <script charset="UTF-8" type="text/javascript" src="Exoplanet/sortSelect.js"></script>
-    <script charset="UTF-8" type="text/javascript" src="Exoplanet/planetSize.js"></script>
 
-<style>
-/* Firefox old*/
-@-moz-keyframes blink {
-        from, 50%, to {
-        opacity: 1;
-    }
 
-    25%, 75% {
-        opacity: 0;
-    }
-}
-
-@-webkit-keyframes blink {
-        from, 50%, to {
-        opacity: 1;
-    }
-
-    25%, 75% {
-        opacity: 0;
-    }
-}
-/* IE */
-@-ms-keyframes blink {
-        from, 50%, to {
-        opacity: 1;
-    }
-
-    25%, 75% {
-        opacity: 0;
-    }
-}
-/* Opera and prob css3 final iteration */
-@keyframes blink {
-        from, 50%, to {
-        opacity: 1;
-    }
-
-    25%, 75% {
-        opacity: 0;
-    }
-}
-.blink-planet {
-        -moz-animation: blink normal 6s infinite ease-in-out; /* Firefox */
-        -webkit-animation: blink normal 6s infinite ease-in-out; /* Webkit */
-        -ms-animation: blink normal 6s infinite ease-in-out; /* IE */
-        animation: blink normal 6s infinite ease-in-out; /* Opera and prob css3 final iteration */
-}
-</style>
  </head>
 <body onload=initMap()    style=background:#F0F8FF;margin:0px;padding:0px;font-family:verdana oncontextmenu="return false">
 
@@ -131,21 +83,7 @@
 <tr >
 <td align=center>
     <button id=zoomToSelectedStarButton disabled onClick=zoomToSelectedStar()>Zoom into star surface</button>
-    <table>
-<tr>
-	<td  id=resizePlanetR style='padding:3px;opacity:.4;background-color:white;border-radius:4px;border:1px solid black' valign=bottom align=center>Resize Planet<br>
-		<button  onClick=planetSizeAdjust(-1) style='height:25px;width:25px;padding:0px'><img width=20 height=20 src="Exoplanet/minusRound.png" /></button>
-		<select title="size toggle value" id=planetSizeAdjustSelect >
-		<option>.5</option>
-		<option>1</option>
-		<option>2</option>
-		<option selected>5</option>
-		<option>10</option>
-		</select>
-		<button onClick=planetSizeAdjust(1)   style='height:25px;width:25px;padding:0px'><img width=20 height=20 src="Exoplanet/plusRound.png" /></button>
-		&nbsp;<input id=adjustedPlantedSizeValue disabled type=text style='width:40px;' value=0 />
-	</td>
-</tr>    </table>
+
 
 
 </td></tr>
