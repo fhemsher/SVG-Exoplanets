@@ -60,12 +60,13 @@ var HZone = false
 
 function zoomToSelectedStar()
 {
+
     hostStarSelect.options[hostStarSelect.selectedIndex].style.fontWeight = "bold"
     StartScale=null //planet animation
     MyStars = true
     StopStarZoom = false
     startCursorLoc()
-
+    StopAnim=false
 
     PlanetCoordsArray =[]
     StarCoordsArray =[]
@@ -140,11 +141,15 @@ function zoomToSelectedStar()
     for(var k = 0; k<exoElems.length; k++)
     {
         var exo = exoElems.item(k)
-        var comp = exo.getAttribute("CompositionClass") //--fill color---
+        var comp = exo.getAttribute("CompositionClass") //--fill gradient---
+
+
         var hab = exo.getAttribute("HabitableClass") //--fill color---
         var atmos = exo.getAttribute("AtmosphereClass") //--stroke color---
         var name = exo.getAttribute("Name")
-        var period = exo.getAttribute("Period")  //--planet animation----
+    var radius = exo.getAttribute("Radius")  //--distance measure----
+    var period = exo.getAttribute("Period")  //--planet animation----
+    var habPot = exo.getAttribute("Habitable")  //--planet blink----
         var letterIndex = name.lastIndexOf(" ")
         var letter = name.charAt(letterIndex+1)
         //<EXOPLANETS><EXO id="exoplanet1538338800304" HostName="16 Cyg B" Name="16 Cyg B b" NameKepler="" NameKOI="" ZoneClass="Cold" MassClass="Jovian" CompositionClass="gas" AtmosphereClass="hydrogen-rich" HabitableClass="non-habitable" MinMass="534.14" Mass="534.14" MaxMass="" Radius="11.06" Density="0.39" Gravity="4.36" EscVel="6.95" SFluxMin=" 0.1183426" SFluxMean=" 0.4656991" SFluxMax="3.489002" TeqMin="149.4" TeqMean="187.6" TeqMax="348.2" TsMin="" TsMean="" TsMax="" SurfPress="210.6" Mag="-21.94" ApparSize="21.15" Period="799.50" SemMajorAxis="1.6800" Eccentricity="0.69" Inclination="" MeanDistance="1.22" Omega="83.4" HZD="1.15" HZC="7.17" HZA="7.16" HZI="0.09" SPH="" IntESI="0.00" SurfESI="0.00" ESI="0.39" HostHabCat="0" Habitable="0" HabMoon="0" Confirmed="1" Disc_Method="Radial Velocity" Disc_Year="1996.00"/></EXOPLANETS>
@@ -231,7 +236,7 @@ function zoomToSelectedStar()
 
         var c = StarProjection(PrimaryStarCoords)
 
-        setOrbitPlanet(ll, name, atmos, comp, hab, letter, k, exoElems.length,period)
+        setOrbitPlanet(ll, name, atmos, comp, hab, letter, k, exoElems.length,period,habPot,radius)
     }
 
     if(MyExoplanet==true)
@@ -256,49 +261,52 @@ function zoomToSelectedStar()
     if(PlanetsLoaded==false)
     {
         PlanetScale = StarView.k/StarScale
-
+        MyStars=false
         setTimeout(locatePlanets, 1800)
     }
 
 }
 var PlanetCoordsArray =[]
 var rotatePlanet = 0
-function setOrbitPlanet(ll, name, atmos, comp, hab, letter, k, qnty,period)
+function setOrbitPlanet(ll, name, atmos, comp, hab, letter, k, qnty,period,habPot,radius)
 {
      var utcms=new Date().getTime()
-    var id = "planet"+utcms
+    var id = "planet"+k+utcms
     var fill = "url(#unknown)"
+    var planetFill="black"
     var stroke = "grey"
 
     if(atmos=="no-atmosphere")stroke = "gainsboro"
         if(atmos=="metals-rich")stroke = "red"
         if(atmos=="hydrogen-rich")stroke = "blue"
 
-        if(hab=="mesoplanet")fill = "url(#mesoplanet)"
-        if(hab=="thermoplanet")fill = "url(#thermoplanet)"
-        if(hab=="psychroplanet")fill = "url(#psychroplanet)"
-        if(hab=="hypopsychroplanet")fill = "url(#hypopsychroplanet)"
-        if(hab=="hyperthermoplanet")fill = "url(#hyperthermoplanet)"
-        if(hab=="non-habitable")fill = "url(#non-habitable)"
+        if(hab=="mesoplanet"){fill = "url(#mesoplanet)";planetColor="#0000AA"}
+        if(hab=="thermoplanet"){fill = "url(#thermoplanet)";planetColor="#CA0A14"}
+        if(hab=="psychroplanet"){fill = "url(#psychroplanet)";planetColor="#37A1E7"}
+        if(hab=="hypopsychroplanet"){fill = "url(#hypopsychroplanet)";planetColor="#AC49E3"}
+        if(hab=="hyperthermoplanet"){fill = "url(#hyperthermoplanet)";planetColor="#F08F27"}
+        if(hab=="non-habitable"){fill = "url(#non-habitable)";planetColor="black"}
 
         var xy = StarProjection(PrimaryStarCoords)
         var x = xy[0]
         var y = xy[1]
 
-        var radius = 60/qnty
-        var strokeWidth = 12/qnty
+
         var exoCircle = PlanetG.append("circle")
         .attr("class", "exoCircle")
         .attr("id", id)
-        .attr("r", radius)
         .attr("period", period)
+        .attr("radius", radius)
         .attr("fill", fill)
         .attr("visibility", "hidden")
-        .attr("stroke-width", strokeWidth)
-        .attr("name", name+"<br><b>Atmoshpere:</b> "+atmos+"<br><b>Composition:</b> "+comp+"<br><b>Habitable:</b> "+hab)
-        .attr("onmouseover", "showExoplanet(evt)")
-        .attr("onmouseout", "hideExoplanet(evt)")
         .attr("stroke", stroke)
+        .attr("hab", hab)
+        .attr("atmos", atmos)
+        .attr("comp", comp)
+        .attr("hab", hab)
+        .attr("planetName", name)
+        .attr("planetColor", planetColor)
+
 
 
 }
@@ -306,12 +314,71 @@ function setOrbitPlanet(ll, name, atmos, comp, hab, letter, k, qnty,period)
 var PlanetsLoaded = false
 function locatePlanets()
 {
+
+   viewPlanetSelect.disabled=false
+    for(var k=viewPlanetSelect.childNodes.length-1;k>0;k--)
+    {
+        viewPlanetSelect.removeChild(viewPlanetSelect.childNodes.item(k))
+    }
     PlanetCoordsArray =[]
 
     var planets = domPlanetG.childNodes
 
     var cnt = 0
     var orbitPaths = orbitG.childNodes
+
+        //----compute planet radius----
+    var planetRadius
+    var planetStrokeWidth
+
+     var minDistArray=[]
+         //---base---
+      var bbSurface=primaryStarSurface.getBBox()
+      if(bbSurface.width<=bbSurface.height)
+      {
+         var minBase="Width"
+         minDistArray.push(bbSurface.width)
+      }
+
+       else
+       {
+          var minBase="Height"
+          minDistArray.push(bbSurface.height)
+       }
+
+
+
+    for(var k = 0; k<orbitPaths.length-2; k++)
+    {
+        var path = orbitPaths.item(k)
+
+        var bb=path.getBBox()
+        if(minBase=="Width")
+            minDistArray.push(bb.width)
+        else
+            minDistArray.push(bb.height)
+     }
+
+     var distArray=[]
+     for(var k=0;k<minDistArray.length-2;k++)
+     {
+
+         var beginDist=minDistArray[k]
+         var nextDist=minDistArray[k+1]
+         var dist=nextDist-beginDist
+         if(dist>0)
+         distArray.push(dist)
+
+     }
+     if(distArray.length!=1)
+     var minDist=Math.min(...distArray)
+     else
+      var minDist=250
+
+
+     planetRadius=planetRadius=minDist/8
+     planetStrokeWidth=planetRadius*.2
+
 
     for(var k = 0; k<orbitPaths.length; k++)
     {
@@ -321,6 +388,8 @@ function locatePlanets()
             var pathLength = path.getTotalLength()
             var Pnt = path.getPointAtLength(0)
             var planet = planets.item(cnt)
+            planet.setAttribute("r",planetRadius)
+            planet.setAttribute("stroke-width",planetStrokeWidth)
 
             planet.removeAttribute("visibility")
             planet.setAttribute("cx",Pnt.x)
@@ -328,13 +397,19 @@ function locatePlanets()
             var period=planet.getAttribute("period")
             PlanetCoordsArray.push([path,planet,period])
 
+            var option=document.createElement("option")
+            option.value=planet.id
+            option.text=planet.getAttribute("planetName")
+            viewPlanetSelect.appendChild(option)
             cnt++
         }
 
     }
 
     PlanetsLoaded = true
-    
+    MyStars=true
+
+
     attachPlanetAnimation()
 }
 
